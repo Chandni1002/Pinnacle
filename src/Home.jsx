@@ -80,37 +80,30 @@
 //   );
 // }
 
-/// Import necessary dependencies
 // Home.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 import { TweenMax, Power3 } from "gsap/all";
-import { FaLinkedin } from "react-icons/fa"; // Import LinkedIn icon
 
 const Home = () => {
-  // useEffect hook to handle animations
+  const [currentTime, setCurrentTime] = useState(getCurrentBerlinTime);
+
   useEffect(() => {
     const videoElement = document.querySelector(".video");
     const letters = Array.from(document.querySelectorAll(".letter"));
 
     const expandText = () => {
-      // Increase the playback rate for faster video when hovering over the text
-      videoElement.playbackRate = 9.0; // Adjust the playbackRate as needed
-
-      // TweenMax animation for expanding text with increased letter spacing
+      videoElement.playbackRate = 9.0;
       TweenMax.staggerTo(
         letters,
         0.3,
         { scaleX: 1.2, letterSpacing: "0.2em", ease: Power3.easeOut },
-        0.05 // Adjust the stagger delay for even spacing
+        0.05
       );
     };
 
     const shrinkText = () => {
-      // Reset the playback rate when not hovering over the text
       videoElement.playbackRate = 0.75;
-
-      // TweenMax animation for shrinking text with normal letter spacing
       TweenMax.staggerTo(
         letters,
         0.3,
@@ -124,15 +117,34 @@ const Home = () => {
       letter.addEventListener("mouseleave", shrinkText);
     });
 
+    const intervalId = setInterval(() => {
+      setCurrentTime(getCurrentBerlinTime);
+    }, 1000);
+
     return () => {
       letters.forEach((letter) => {
         letter.removeEventListener("mouseenter", expandText);
         letter.removeEventListener("mouseleave", shrinkText);
       });
+      clearInterval(intervalId);
     };
   }, []);
 
-  // JSX structure for the component
+  function getCurrentBerlinTime() {
+    const now = new Date();
+    const berlinTimeString = now.toLocaleTimeString("en-US", {
+      timeZone: "Europe/Berlin",
+      hour12: false,
+    });
+    return ` ${berlinTimeString}`;
+  }
+
+  const handleContactButtonClick = () => {
+    // Replace 'your-email@example.com' with the desired email address
+    const emailAddress = "hi.sridhar@fyi";
+    window.location.href = `mailto:${emailAddress}`;
+  };
+
   return (
     <div className="container">
       <video
@@ -155,25 +167,15 @@ const Home = () => {
         <span className="letter t8">E</span>
       </div>
 
-      <div className="linkedin-logo">
-        <a
-          href="https://www.linkedin.com/company/pinnaclefund/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {/* Use the FaLinkedin component to render the LinkedIn icon with a white color */}
-          <FaLinkedin size={24} color="#ffffff" />
-        </a>
+      <div className="contact-button">
+        <button onClick={handleContactButtonClick}>Contact</button>
       </div>
 
       <div className="address">
-        <p>Berlin, Germany</p>
+        <p>Locations : BRLN &amp; STKHM</p>
       </div>
 
-      <div className="utc-time">
-        {/* Add a function to display the current UTC time */}
-        {getCurrentUTCTime()}
-      </div>
+      <div className="utc-time">{currentTime}</div>
 
       <div className="description">
         <p>
@@ -183,17 +185,10 @@ const Home = () => {
       </div>
 
       <div className="tagline">
-        Venture Capital and Private Equity Principals
+        Empowering Innovation in the Nordic and European Markets
       </div>
     </div>
   );
 };
 
 export default Home;
-
-// Function to get current UTC time
-function getCurrentUTCTime() {
-  const now = new Date();
-  const utcString = now.toISOString().slice(11, 19);
-  return ` UTC Time: ${utcString}`;
-}

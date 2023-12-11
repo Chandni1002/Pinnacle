@@ -193,16 +193,27 @@ body {
     font-size: 18px;
 }
 
-.linkedin-logo {
+.contact-button {
     position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-.linkedin-logo svg {
-    width: 40px;
-    height: 30px;
-}
+    top: 10px; /* Adjust the distance from the top as needed */
+    right: 10px; /* Adjust the distance from the right as needed */
+  }
+  
+  .contact-button button {
+    background-color: white;
+    color: #333;
+    padding: 8px 16px; /* Adjust padding for a slightly smaller button */
+    border: none;
+    cursor: pointer;
+    font-size: 16px; /* Adjust font size for a slightly smaller button */
+    border-radius: 8px; /* Adjust border radius for a slightly smaller button */
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .contact-button button:hover {
+    background-color: darkgray;
+  }
 
 .address {
     position: absolute;
